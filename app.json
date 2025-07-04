@@ -9,6 +9,10 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "infoPlist": {
+        "NSCameraUsageDescription": "카메라 사용 이유 설명",
+        "NSPhotoLibraryUsageDescription": "사진첩 접근 설명"
+      },
       "supportsTablet": true
     },
     "android": {
