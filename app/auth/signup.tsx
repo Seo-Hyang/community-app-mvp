@@ -1,9 +1,9 @@
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-export default function LoginScreen() {
+export default function AuthScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>로그인 / 회원가입</Text>
+      <Text style={styles.title}>회원가입</Text>
     </View>
   );
 }
