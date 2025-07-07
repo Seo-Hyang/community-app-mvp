@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface UserDocument {
   id: string; // uid
   email: string;
@@ -22,6 +24,4 @@ export interface CommentDocument {
   userDisplayName: string;
   createdAt: FirebaseTimestamp;
 }
-
-import { Timestamp } from "firebase/firestore";
 export type FirebaseTimestamp = Timestamp;

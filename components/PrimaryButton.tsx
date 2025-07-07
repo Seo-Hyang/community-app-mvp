@@ -9,7 +9,14 @@ interface Props {
 
 export default function PrimaryButton({ title, onPress, style }: Props) {
   return (
-    <Pressable style={[styles.button, style]} onPress={onPress}>
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.button,
+        pressed && { backgroundColor: "#E5DCD4" },
+        style,
+      ]}
+    >
       <Text style={styles.text}>{title}</Text>
     </Pressable>
   );
