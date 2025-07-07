@@ -1,18 +1,37 @@
-// app/index.tsx
 import PrimaryButton from "@/components/PrimaryButton";
 import { colors } from "@/styles/shared";
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 
+import { auth } from "@/services/firebaseConfig";
+import { useAuthStore } from "@/stores/authStore";
+
+import { signOut } from "firebase/auth";
+
 export default function MainScreen() {
   const router = useRouter();
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    logout();
+    router.replace("/auth/login");
+  };
 
   return (
     <View style={styles.container}>
+      {user && <PrimaryButton title="로그아웃" onPress={handleLogout} />}
+
       <Text style={styles.title}>메인 페이지</Text>
+
       <PrimaryButton
         title="로그인"
         onPress={() => router.push("/auth/login")}
+      />
+      <PrimaryButton
+        title="회원가입"
+        onPress={() => router.push("/auth/signup")}
       />
       <PrimaryButton
         title="글쓰기"
