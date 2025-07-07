@@ -10,10 +10,12 @@ import { StyleSheet, Text, View } from "react-native";
 export default function SignupScreen() {
   const router = useRouter();
 
+  const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [nicknameError, setNicknameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
@@ -26,9 +28,15 @@ export default function SignupScreen() {
     const hasNumber = /\d/.test(password);
     const hasSpecial = /[^a-zA-Z0-9]/.test(password);
 
+    setNicknameError("");
     setEmailError("");
     setPasswordError("");
     setConfirmPasswordError("");
+
+    if (!nickname.trim()) {
+      setNicknameError("닉네임을 입력해주세요.");
+      valid = false;
+    }
 
     if (!emailRegex.test(email)) {
       setEmailError("올바른 형태의 이메일을 입력해주세요");
@@ -57,7 +65,11 @@ export default function SignupScreen() {
 
     try {
       const user = await signUp(email, password);
-      await createUserDocument({ uid: user.uid, email: user.email ?? "" });
+      await createUserDocument({
+        uid: user.uid,
+        email: user.email ?? "",
+        displayName: nickname.trim(),
+      });
       router.replace("/auth/login");
     } catch (error: any) {
       setEmailError(error.message ?? "회원가입 중 오류가 발생했습니다.");
@@ -78,6 +90,18 @@ export default function SignupScreen() {
           setEmailError("");
         }}
         autoCapitalize="none"
+      />
+
+      {nicknameError ? (
+        <Text style={styles.errorText}>{nicknameError}</Text>
+      ) : null}
+      <InputField
+        placeholder="닉네임"
+        value={nickname}
+        onChangeText={(text) => {
+          setNickname(text);
+          setNicknameError("");
+        }}
       />
 
       {passwordError ? (
