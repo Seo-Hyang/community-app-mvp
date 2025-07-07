@@ -39,8 +39,17 @@ export default function MainScreen() {
         style={styles.button}
       />
       <PrimaryButton
-        title="게시글 상세"
-        onPress={() => router.push("/post/123")}
+        title="게시글 목록"
+        onPress={() => router.push("/post/")}
+        style={styles.button}
+      />
+
+      <PrimaryButton
+        title="사용자 확인"
+        onPress={() => {
+          const currentUser = auth.currentUser;
+          console.log("currentUser:", currentUser?.displayName);
+        }}
         style={styles.button}
       />
     </View>
@@ -62,7 +71,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   button: {
-    marginTop: 12,
     width: "100%",
   },
 });
