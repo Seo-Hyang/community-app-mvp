@@ -64,7 +64,7 @@ export default function SignupScreen() {
     if (!validate()) return;
 
     try {
-      const user = await signUp(email, password);
+      const user = await signUp(email, password, nickname);
       await createUserDocument({
         uid: user.uid,
         email: user.email ?? "",
