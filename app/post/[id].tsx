@@ -1,13 +1,15 @@
 import CommentItem from "@/components/CommentItem";
 import CustomHeader from "@/components/CustomHeader";
+import PrimaryButton from "@/components/PrimaryButton";
 import { auth, db } from "@/services/firebaseConfig";
 import { borderRadius, colors } from "@/styles/shared";
 import { PostDocument } from "@/types/firebaseTypes";
 import { format } from "date-fns";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   onSnapshot,
@@ -122,6 +124,27 @@ export default function PostDetailScreen() {
     }
   };
 
+  const router = useRouter();
+
+  const handleDelete = () => {
+    Alert.alert("삭제 확인", "정말 이 글을 삭제하시겠습니까?", [
+      { text: "취소", style: "cancel" },
+      {
+        text: "삭제",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await deleteDoc(doc(db, "posts", id!));
+            router.replace("/post");
+          } catch (e) {
+            console.error(e);
+            Alert.alert("삭제 중 오류가 발생했습니다.");
+          }
+        },
+      },
+    ]);
+  };
+
   if (loading) {
     return (
       <View style={styles.center}>
@@ -155,6 +178,15 @@ export default function PostDetailScreen() {
             <Image source={{ uri: post.imageUrl }} style={styles.image} />
           )}
         </View>
+        {auth.currentUser?.uid === post.userId && (
+          <View style={styles.actionButtons}>
+            <PrimaryButton
+              title={"수정하기"}
+              onPress={() => router.replace(`/post/write/${id}`)}
+            />
+            <PrimaryButton title={"삭제하기"} onPress={handleDelete} />
+          </View>
+        )}
         {/* 댓글 영역 */}
         <View style={styles.commentInputContainer}>
           <TextInput
@@ -164,7 +196,7 @@ export default function PostDetailScreen() {
             placeholder="댓글을 입력하세요"
             multiline
           />
-          <Pressable onPress={handleSubmitComment} style={styles.button}>
+          <Pressable onPress={handleSubmitComment} style={styles.commentButton}>
             <Text>등록</Text>
           </Pressable>
         </View>
@@ -229,6 +261,12 @@ const styles = StyleSheet.create({
     height: 300,
     borderRadius: 8,
   },
+  actionButtons: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginTop: 16,
+    gap: 6,
+  },
   commentInputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -246,7 +284,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     maxHeight: 100,
   },
-  button: {
+  commentButton: {
     backgroundColor: colors.card,
     paddingVertical: 12,
     paddingHorizontal: 16,
