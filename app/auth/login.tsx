@@ -91,6 +91,7 @@ export default function LoginScreen() {
           title="회원가입 하러 가기"
           onPress={() => router.push("/auth/signup")}
           style={styles.secondaryButton}
+          disabled={loading}
         />
       </View>
     </View>
