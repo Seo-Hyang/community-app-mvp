@@ -1,6 +1,7 @@
 # Community App (React Native + Firebase)
 
 간단한 커뮤니티 앱 MVP
+   
 Expo + Firebase 기반으로 로그인, 글쓰기, 댓글 기능을 포함합니다.
 
 ## 기술 스택
