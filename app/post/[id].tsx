@@ -1,7 +1,7 @@
 import CommentItem from "@/components/CommentItem";
-import PrimaryButton from "@/components/PrimaryButton";
+import CustomHeader from "@/components/CustomHeader";
 import { auth, db } from "@/services/firebaseConfig";
-import { colors } from "@/styles/shared";
+import { borderRadius, colors } from "@/styles/shared";
 import { PostDocument } from "@/types/firebaseTypes";
 import { format } from "date-fns";
 import { useLocalSearchParams } from "expo-router";
@@ -20,6 +20,7 @@ import {
   ActivityIndicator,
   Alert,
   Image,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -138,42 +139,47 @@ export default function PostDetailScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>{post.title}</Text>
-      <View style={styles.meta}>
-        <Text style={styles.author}>{post.userDisplayName}</Text>
-        <Text style={styles.date}>
-          {format(post.createdAt.toDate(), "yyyy.MM.dd HH:mm")}
-        </Text>
-      </View>
-      <View style={styles.contentbox}>
-        <Text style={styles.content}>{post.content}</Text>
-        {post.imageUrl && (
-          <Image source={{ uri: post.imageUrl }} style={styles.image} />
-        )}
-      </View>
-      {/* 댓글 영역 */}
-      <View style={styles.commentInputContainer}>
-        <TextInput
-          style={styles.commentInput}
-          value={commentText}
-          onChangeText={setCommentText}
-          placeholder="댓글을 입력하세요"
-          multiline
-        />
-        <PrimaryButton title="등록" onPress={handleSubmitComment} />
-      </View>
-      <View style={styles.commentsContainer}>
-        {comments.map((c) => (
-          <CommentItem
-            key={c.id}
-            text={c.text}
-            userDisplayName={c.userDisplayName}
-            createdAt={c.createdAtFormatted}
+    <View style={{ flex: 1 }}>
+      <CustomHeader title="게시글 상세" />
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>{post.title}</Text>
+        <View style={styles.meta}>
+          <Text style={styles.author}>{post.userDisplayName}</Text>
+          <Text style={styles.date}>
+            {format(post.createdAt.toDate(), "yyyy.MM.dd HH:mm")}
+          </Text>
+        </View>
+        <View style={styles.contentbox}>
+          <Text style={styles.content}>{post.content}</Text>
+          {post.imageUrl && (
+            <Image source={{ uri: post.imageUrl }} style={styles.image} />
+          )}
+        </View>
+        {/* 댓글 영역 */}
+        <View style={styles.commentInputContainer}>
+          <TextInput
+            style={styles.commentInput}
+            value={commentText}
+            onChangeText={setCommentText}
+            placeholder="댓글을 입력하세요"
+            multiline
           />
-        ))}
-      </View>
-    </ScrollView>
+          <Pressable onPress={handleSubmitComment} style={styles.button}>
+            <Text>등록</Text>
+          </Pressable>
+        </View>
+        <View style={styles.commentsContainer}>
+          {comments.map((c) => (
+            <CommentItem
+              key={c.id}
+              text={c.text}
+              userDisplayName={c.userDisplayName}
+              createdAt={c.createdAtFormatted}
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -225,7 +231,7 @@ const styles = StyleSheet.create({
   },
   commentInputContainer: {
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "center",
     marginTop: 24,
     borderTopWidth: 1,
     borderTopColor: colors.border,
@@ -240,7 +246,14 @@ const styles = StyleSheet.create({
     marginRight: 8,
     maxHeight: 100,
   },
+  button: {
+    backgroundColor: colors.card,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: borderRadius.md,
+  },
   commentsContainer: {
     marginTop: 16,
+    paddingHorizontal: 12,
   },
 });
