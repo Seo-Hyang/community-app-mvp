@@ -1,3 +1,4 @@
+import CustomHeader from "@/components/CustomHeader";
 import PrimaryButton from "@/components/PrimaryButton";
 import { auth, db, storage } from "@/services/firebaseConfig";
 import { colors } from "@/styles/shared";
@@ -84,34 +85,37 @@ export default function WritePostScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>제목</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="제목을 입력하세요"
-        value={title}
-        onChangeText={setTitle}
-      />
-      <Text style={styles.label}>본문</Text>
-      <TextInput
-        style={[styles.input, styles.textArea]}
-        placeholder="내용을 입력하세요"
-        value={content}
-        onChangeText={setContent}
-        multiline
-        numberOfLines={6}
-      />
-      <PrimaryButton
-        title="이미지 선택"
-        onPress={pickImage}
-        style={styles.imagePickerButton}
-      />
-      {image && <Image source={{ uri: image }} style={styles.imagePreview} />}
-      <PrimaryButton
-        title={loading ? "저장 중..." : "저장하기"}
-        onPress={handleSave}
-        disabled={loading}
-      />
+    <View style={{ flex: 1 }}>
+      <CustomHeader title="글 쓰기" />
+      <View style={styles.container}>
+        <Text style={styles.label}>제목</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="제목을 입력하세요"
+          value={title}
+          onChangeText={setTitle}
+        />
+        <Text style={styles.label}>본문</Text>
+        <TextInput
+          style={[styles.input, styles.textArea]}
+          placeholder="내용을 입력하세요"
+          value={content}
+          onChangeText={setContent}
+          multiline
+          numberOfLines={6}
+        />
+        <PrimaryButton
+          title="이미지 선택"
+          onPress={pickImage}
+          style={styles.imagePickerButton}
+        />
+        {image && <Image source={{ uri: image }} style={styles.imagePreview} />}
+        <PrimaryButton
+          title={loading ? "저장 중..." : "저장하기"}
+          onPress={handleSave}
+          disabled={loading}
+        />
+      </View>
     </View>
   );
 }
@@ -148,6 +152,7 @@ const styles = StyleSheet.create({
   },
   imagePickerButton: {
     backgroundColor: colors.background,
+    borderWidth: 2,
     borderColor: colors.border,
   },
 });
