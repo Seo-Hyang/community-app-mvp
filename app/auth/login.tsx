@@ -1,3 +1,5 @@
+//app/auth/login.tsx
+import CustomHeader from "@/components/CustomHeader";
 import InputField from "@/components/InputField";
 import PrimaryButton from "@/components/PrimaryButton";
 import { signIn } from "@/services/authService";
@@ -17,6 +19,8 @@ export default function LoginScreen() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const validate = () => {
     let valid = true;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -35,6 +39,7 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     if (!validate()) return;
 
+    setLoading(true);
     try {
       const user = await signIn(email, password);
       if (user) {
@@ -44,44 +49,51 @@ export default function LoginScreen() {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: any) {
       setPasswordError("이메일 또는 비밀번호가 올바르지 않습니다.");
+    } finally {
+      setLoading(false); // ← 반드시 false
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>로그인</Text>
+    <View style={{ flex: 1 }}>
+      <CustomHeader title="로그인" showBackButton={false} />
+      <View style={styles.container}>
+        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+        <InputField
+          placeholder="이메일"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={(text) => {
+            setEmail(text);
+            setEmailError("");
+          }}
+          autoCapitalize="none"
+        />
 
-      {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-      <InputField
-        placeholder="이메일"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={(text) => {
-          setEmail(text);
-          setEmailError("");
-        }}
-        autoCapitalize="none"
-      />
+        {passwordError ? (
+          <Text style={styles.errorText}>{passwordError}</Text>
+        ) : null}
+        <InputField
+          placeholder="비밀번호"
+          secureTextEntry
+          value={password}
+          onChangeText={(text) => {
+            setPassword(text);
+            setPasswordError("");
+          }}
+        />
 
-      {passwordError ? (
-        <Text style={styles.errorText}>{passwordError}</Text>
-      ) : null}
-      <InputField
-        placeholder="비밀번호"
-        secureTextEntry
-        value={password}
-        onChangeText={(text) => {
-          setPassword(text);
-          setPasswordError("");
-        }}
-      />
-
-      <PrimaryButton title="로그인" onPress={handleLogin} />
-      <PrimaryButton
-        title="회원가입 하러 가기"
-        onPress={() => router.push("/auth/signup")}
-        style={styles.secondaryButton}
-      />
+        <PrimaryButton
+          title={loading ? "로그인 중..." : "로그인"}
+          onPress={handleLogin}
+          disabled={loading}
+        />
+        <PrimaryButton
+          title="회원가입 하러 가기"
+          onPress={() => router.push("/auth/signup")}
+          style={styles.secondaryButton}
+        />
+      </View>
     </View>
   );
 }
