@@ -1,13 +1,11 @@
 import CustomHeader from "@/components/CustomHeader";
 import FloatingWriteButton from "@/components/FloatingWriteButton";
 import PostCard from "@/components/PostCard";
-import { auth, db } from "@/services/firebaseConfig";
-import { useAuthStore } from "@/stores/authStore";
+import { db } from "@/services/firebaseConfig";
 import { colors } from "@/styles/shared";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { useRouter } from "expo-router";
-import { signOut } from "firebase/auth";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import {
@@ -29,14 +27,6 @@ export default function PostListScreen() {
   const router = useRouter();
   const [posts, setPosts] = useState<PostItem[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const logout = useAuthStore((state) => state.logout);
-
-  const onLogout = async () => {
-    await signOut(auth);
-    logout();
-    router.replace("/auth/login");
-  };
 
   useEffect(() => {
     const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
@@ -79,10 +69,10 @@ export default function PostListScreen() {
         showBackButton={false}
         rightElement={
           <Ionicons
-            name="log-out-outline"
+            name="person-outline"
             size={24}
             color={colors.text}
-            onPress={onLogout}
+            onPress={() => router.replace("/user")}
           />
         }
       />

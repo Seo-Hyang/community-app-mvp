@@ -1,7 +1,7 @@
-// components/CustomHeader.tsx
 import { colors } from "@/styles/shared";
 import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -16,15 +16,23 @@ export default function CustomHeader({
   showBackButton = true,
   rightElement = null,
 }: Props) {
+  const router = useRouter();
+  const navigation = useNavigation();
+
+  const handleBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      router.replace("/post/");
+    }
+  };
+
   return (
     <View style={styles.container}>
-      {/* 좌측 백 버튼 */}
       {showBackButton ? (
-        <Link href=".." asChild>
-          <TouchableOpacity style={styles.sideButton}>
-            <Ionicons name="chevron-back" size={24} color={colors.text} />
-          </TouchableOpacity>
-        </Link>
+        <TouchableOpacity style={styles.sideButton} onPress={handleBack}>
+          <Ionicons name="chevron-back" size={24} color={colors.text} />
+        </TouchableOpacity>
       ) : (
         <View style={styles.sideButton} />
       )}

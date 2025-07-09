@@ -1,18 +1,23 @@
 import { colors } from "@/styles/shared";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import React from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
 
+const queryClient = new QueryClient();
+
 export default function RootLayout() {
   return (
-    <SafeAreaView style={styles.container}>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.background },
-        }}
-      />
-    </SafeAreaView>
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaView style={styles.container}>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: colors.background },
+          }}
+        />
+      </SafeAreaView>
+    </QueryClientProvider>
   );
 }
 
