@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
 interface AuthState {
-  user: { uid: string; email: string } | null;
-  setUser: (user: { uid: string; email: string } | null) => void;
+  user: { uid: string; email: string | null } | null;
+  setUser: (user: { uid: string; email: string | null } | null) => void;
   logout: () => void;
 }
 
