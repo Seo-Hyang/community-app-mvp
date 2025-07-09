@@ -1,7 +1,13 @@
+import CustomHeader from "@/components/CustomHeader";
+import FloatingWriteButton from "@/components/FloatingWriteButton";
 import PostCard from "@/components/PostCard";
-import { db } from "@/services/firebaseConfig";
+import { auth, db } from "@/services/firebaseConfig";
+import { useAuthStore } from "@/stores/authStore";
+import { colors } from "@/styles/shared";
+import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { useRouter } from "expo-router";
+import { signOut } from "firebase/auth";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import {
@@ -23,6 +29,14 @@ export default function PostListScreen() {
   const router = useRouter();
   const [posts, setPosts] = useState<PostItem[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const logout = useAuthStore((state) => state.logout);
+
+  const onLogout = async () => {
+    await signOut(auth);
+    logout();
+    router.replace("/auth/login");
+  };
 
   useEffect(() => {
     const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
@@ -59,28 +73,44 @@ export default function PostListScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {posts.map((post) => (
-        <Pressable
-          key={post.id}
-          onPress={() => router.push(`/post/${post.id}`)}
-          style={({ pressed }) => pressed && styles.pressed}
-        >
-          <PostCard
-            id={post.id}
-            title={post.title}
-            userDisplayName={post.userDisplayName}
-            createdAt={format(post.createdAt, "yyyy.MM.dd")}
+    <View style={{ flex: 1 }}>
+      <CustomHeader
+        title="게시글 목록"
+        showBackButton={false}
+        rightElement={
+          <Ionicons
+            name="log-out-outline"
+            size={24}
+            color={colors.text}
+            onPress={onLogout}
           />
-        </Pressable>
-      ))}
-    </ScrollView>
+        }
+      />
+      <ScrollView contentContainerStyle={styles.container}>
+        {posts.map((post) => (
+          <Pressable
+            key={post.id}
+            onPress={() => router.push(`/post/${post.id}`)}
+            style={({ pressed }) => pressed && styles.pressed}
+          >
+            <PostCard
+              id={post.id}
+              title={post.title}
+              userDisplayName={post.userDisplayName}
+              createdAt={format(post.createdAt, "yyyy.MM.dd")}
+            />
+          </Pressable>
+        ))}
+      </ScrollView>
+      <FloatingWriteButton />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: colors.background,
   },
   center: {
     flex: 1,
