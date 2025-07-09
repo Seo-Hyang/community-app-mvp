@@ -4,7 +4,7 @@ import { colors } from "../styles/shared";
 interface CommentItemProps {
   text: string;
   userDisplayName: string;
-  createdAt: string; // formatted
+  createdAt: string;
 }
 
 export default function CommentItem({

@@ -1,4 +1,3 @@
-//app/auth/login.tsx
 import CustomHeader from "@/components/CustomHeader";
 import InputField from "@/components/InputField";
 import PrimaryButton from "@/components/PrimaryButton";
@@ -50,7 +49,7 @@ export default function LoginScreen() {
     } catch (error: any) {
       setPasswordError("이메일 또는 비밀번호가 올바르지 않습니다.");
     } finally {
-      setLoading(false); // ← 반드시 false
+      setLoading(false);
     }
   };
 

@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 12,
     fontSize: 16,
-    paddingRight: 40, // 아이콘 영역 확보
+    paddingRight: 40,
   },
   eyeButton: {
     position: "absolute",

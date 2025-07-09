@@ -8,7 +8,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 interface Props {
   title: string;
   showBackButton?: boolean;
-  rightElement?: React.ReactNode; // ← 우측에 렌더링할 요소
+  rightElement?: React.ReactNode;
 }
 
 export default function CustomHeader({
@@ -26,17 +26,15 @@ export default function CustomHeader({
           </TouchableOpacity>
         </Link>
       ) : (
-        <View style={styles.sideButton} /> // 빈 공간 채우기
+        <View style={styles.sideButton} />
       )}
 
-      {/* 중앙 타이틀 */}
       <Text style={styles.title}>{title}</Text>
 
-      {/* 우측 사용자 지정 버튼 */}
       {rightElement ? (
         <View style={styles.sideButton}>{rightElement}</View>
       ) : (
-        <View style={styles.sideButton} /> // 빈 공간 채우기
+        <View style={styles.sideButton} />
       )}
     </View>
   );
@@ -47,19 +45,19 @@ const styles = StyleSheet.create({
     height: 56,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between", // ← 좌/중앙/우 구분
+    justifyContent: "space-between",
     paddingHorizontal: 16,
     backgroundColor: colors.background,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
   sideButton: {
-    width: 40, // 아이콘 영역 고정 너비
+    width: 40,
     alignItems: "center",
     justifyContent: "center",
   },
   title: {
-    flex: 1, // 가운데 제목이 가능한 넓게
+    flex: 1,
     textAlign: "center",
     fontSize: 18,
     fontWeight: "600",
