@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 20,
     bottom: 40,
-    backgroundColor: colors.card,
+    backgroundColor: colors.background,
     borderRadius: borderRadius.lg,
     alignItems: "center",
     justifyContent: "center",
