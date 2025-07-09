@@ -1,12 +1,20 @@
 import { auth, db } from "@/services/firebaseConfig";
-import type { PostDocument } from "@/types/firebaseTypes";
 import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs, query, where } from "firebase/firestore";
+
+export interface UserPostItem {
+  id: string;
+  title: string;
+  content: string;
+  imageUrl?: string;
+  userDisplayName: string;
+  createdAt: Date;
+}
 
 export const useUserPosts = () => {
   const uid = auth.currentUser?.uid;
 
-  return useQuery<PostDocument[]>({
+  return useQuery<UserPostItem[]>({
     queryKey: ["user_posts", uid],
     queryFn: async () => {
       if (!uid) return [];
@@ -21,7 +29,7 @@ export const useUserPosts = () => {
           imageUrl: data.imageUrl ?? null,
           userDisplayName: data.userDisplayName,
           createdAt: data.createdAt.toDate(),
-        } as PostDocument;
+        } as UserPostItem;
       });
     },
     enabled: !!uid,

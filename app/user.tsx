@@ -1,7 +1,7 @@
 import CustomHeader from "@/components/CustomHeader";
 import PostCard from "@/components/PostCard";
 import PrimaryButton from "@/components/PrimaryButton";
-import { PostData, useUserPosts } from "@/queries/useUserPosts";
+import { UserPostItem, useUserPosts } from "@/queries/useUserPosts";
 import { auth } from "@/services/firebaseConfig";
 import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/shared";
@@ -43,7 +43,6 @@ export default function UserScreen() {
     <View style={{ flex: 1 }}>
       <CustomHeader title="프로필" />
       <View style={styles.container}>
-        {/* 프로필 정보 */}
         <View style={styles.section}>
           <Text style={styles.text}>
             이메일: <Text style={styles.name}>{user.email}</Text>
@@ -54,15 +53,13 @@ export default function UserScreen() {
           <PrimaryButton title={"로그아웃"} onPress={onLogout} />
         </View>
 
-        {/* 내가 쓴 게시글 */}
         <Text style={styles.listHeader}>내가 쓴 게시글</Text>
-
         {isLoading ? (
           <ActivityIndicator size="large" />
         ) : posts && posts.length > 0 ? (
           <FlatList
             data={posts}
-            keyExtractor={(item: PostData) => item.id}
+            keyExtractor={(item: UserPostItem) => item.id}
             renderItem={({ item }) => (
               <Pressable
                 key={item.id}
