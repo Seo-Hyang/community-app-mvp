@@ -16,14 +16,14 @@ const styles = StyleSheet.create({
   fab: {
     position: "absolute",
     right: 20,
-    bottom: 30,
-    width: 60,
-    height: 60,
+    bottom: 40,
     backgroundColor: colors.card,
     borderRadius: borderRadius.lg,
     alignItems: "center",
     justifyContent: "center",
     elevation: 5,
+    paddingVertical: 14,
+    paddingHorizontal: 22,
   },
   text: {
     color: colors.text,
