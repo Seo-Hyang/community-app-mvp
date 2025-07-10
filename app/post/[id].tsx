@@ -22,6 +22,8 @@ import {
   ActivityIndicator,
   Alert,
   Image,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -162,9 +164,17 @@ export default function PostDetailScreen() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      style={styles.wrapper}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      // iOS: padding, Android: height 권장
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
       <CustomHeader title="게시글 상세" />
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
         <Text style={styles.title}>{post.title}</Text>
         <View style={styles.meta}>
           <Text style={styles.author}>{post.userDisplayName}</Text>
@@ -187,41 +197,47 @@ export default function PostDetailScreen() {
             <PrimaryButton title={"삭제하기"} onPress={handleDelete} />
           </View>
         )}
-        {/* 댓글 영역 */}
-        <View style={styles.commentInputContainer}>
-          <TextInput
-            style={styles.commentInput}
-            value={commentText}
-            onChangeText={setCommentText}
-            placeholder="댓글을 입력하세요"
-            multiline
-          />
-          <Pressable onPress={handleSubmitComment} style={styles.commentButton}>
-            <Text>등록</Text>
-          </Pressable>
-        </View>
-        <View style={styles.commentsContainer}>
-          {comments.map((c) => (
-            <CommentItem
-              key={c.id}
-              text={c.text}
-              userDisplayName={c.userDisplayName}
-              createdAt={c.createdAtFormatted}
+        <View style={styles.comments}>
+          {/* 댓글 영역 */}
+          <View style={styles.commentInputContainer}>
+            <TextInput
+              style={styles.commentInput}
+              value={commentText}
+              onChangeText={setCommentText}
+              placeholder="댓글을 입력하세요"
+              multiline
             />
-          ))}
+            <Pressable
+              onPress={handleSubmitComment}
+              style={styles.commentButton}
+            >
+              <Text>등록</Text>
+            </Pressable>
+          </View>
+          <View style={styles.commentsContainer}>
+            {comments.map((c) => (
+              <CommentItem
+                key={c.id}
+                text={c.text}
+                userDisplayName={c.userDisplayName}
+                createdAt={c.createdAtFormatted}
+              />
+            ))}
+          </View>
         </View>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: { flex: 1 },
   container: {
-    padding: 16,
+    padding: 14,
   },
   center: {
     flex: 1,
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
     alignItems: "center",
   },
   title: {
@@ -266,6 +282,10 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     marginTop: 16,
     gap: 6,
+  },
+  comments: {
+    flexGrow: 1,
+    justifyContent: "space-between",
   },
   commentInputContainer: {
     flexDirection: "row",

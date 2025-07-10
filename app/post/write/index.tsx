@@ -11,7 +11,16 @@ import { useRouter } from "expo-router";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
-import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+} from "react-native";
 
 export default function WritePostScreen() {
   const router = useRouter();
@@ -85,9 +94,17 @@ export default function WritePostScreen() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      style={styles.wrapper}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
       <CustomHeader title="글 쓰기" />
-      <View style={styles.container}>
+
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
         <Text style={styles.label}>제목</Text>
         <TextInput
           style={styles.input}
@@ -95,6 +112,7 @@ export default function WritePostScreen() {
           value={title}
           onChangeText={setTitle}
         />
+
         <Text style={styles.label}>본문</Text>
         <TextInput
           style={[styles.input, styles.textArea]}
@@ -104,27 +122,33 @@ export default function WritePostScreen() {
           multiline
           numberOfLines={6}
         />
+
         <PrimaryButton
           title="이미지 선택"
           onPress={pickImage}
           style={styles.imagePickerButton}
         />
         {image && <Image source={{ uri: image }} style={styles.imagePreview} />}
+
         <PrimaryButton
           title={loading ? "저장 중..." : "저장하기"}
           onPress={handleSave}
           disabled={loading}
         />
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     flex: 1,
-    padding: 16,
     backgroundColor: colors.background,
+  },
+  container: {
+    flexGrow: 1, // flex:1 대신 flexGrow:1
+    padding: 16,
+    justifyContent: "flex-start",
   },
   label: {
     fontSize: 16,
@@ -139,6 +163,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginBottom: 16,
     fontSize: 14,
+    backgroundColor: "#fff",
   },
   textArea: {
     height: 120,

@@ -17,6 +17,9 @@ import {
   ActivityIndicator,
   Alert,
   Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -114,9 +117,13 @@ export default function EditPostScreen() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      style={styles.wrapper}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
       <CustomHeader title="글 수정" />
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Text style={styles.label}>제목</Text>
         <TextInput style={styles.input} value={title} onChangeText={setTitle} />
 
@@ -140,12 +147,16 @@ export default function EditPostScreen() {
           onPress={handleSave}
           disabled={saving}
         />
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
   container: {
     flex: 1,
     padding: 16,

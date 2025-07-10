@@ -6,7 +6,13 @@ import { createUserDocument } from "@/services/userService";
 import { colors } from "@/styles/shared";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 export default function SignupScreen() {
   const router = useRouter();
@@ -83,70 +89,82 @@ export default function SignupScreen() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <CustomHeader title="회원가입" />
-      <View style={styles.container}>
-        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-        <InputField
-          placeholder="이메일"
-          keyboardType="email-address"
-          value={email}
-          onChangeText={(text) => {
-            setEmail(text);
-            setEmailError("");
-          }}
-          autoCapitalize="none"
-        />
+    <KeyboardAvoidingView
+      style={styles.wrapper}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      // iOS: padding, Android: height 권장
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
+      <View style={{ flex: 1 }}>
+        <CustomHeader title="회원가입" />
+        <View style={styles.container}>
+          {emailError ? (
+            <Text style={styles.errorText}>{emailError}</Text>
+          ) : null}
+          <InputField
+            placeholder="이메일"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={(text) => {
+              setEmail(text);
+              setEmailError("");
+            }}
+            autoCapitalize="none"
+          />
 
-        {nicknameError ? (
-          <Text style={styles.errorText}>{nicknameError}</Text>
-        ) : null}
-        <InputField
-          placeholder="닉네임"
-          value={nickname}
-          onChangeText={(text) => {
-            setNickname(text);
-            setNicknameError("");
-          }}
-        />
+          {nicknameError ? (
+            <Text style={styles.errorText}>{nicknameError}</Text>
+          ) : null}
+          <InputField
+            placeholder="닉네임"
+            value={nickname}
+            onChangeText={(text) => {
+              setNickname(text);
+              setNicknameError("");
+            }}
+          />
 
-        {passwordError ? (
-          <Text style={styles.errorText}>{passwordError}</Text>
-        ) : null}
-        <InputField
-          placeholder="비밀번호"
-          secureTextEntry
-          value={password}
-          onChangeText={(text) => {
-            setPassword(text);
-            setPasswordError("");
-          }}
-        />
+          {passwordError ? (
+            <Text style={styles.errorText}>{passwordError}</Text>
+          ) : null}
+          <InputField
+            placeholder="비밀번호"
+            secureTextEntry
+            value={password}
+            onChangeText={(text) => {
+              setPassword(text);
+              setPasswordError("");
+            }}
+          />
 
-        {confirmPasswordError ? (
-          <Text style={styles.errorText}>{confirmPasswordError}</Text>
-        ) : null}
-        <InputField
-          placeholder="비밀번호 확인"
-          secureTextEntry
-          value={confirmPassword}
-          onChangeText={(text) => {
-            setConfirmPassword(text);
-            setConfirmPasswordError("");
-          }}
-        />
+          {confirmPasswordError ? (
+            <Text style={styles.errorText}>{confirmPasswordError}</Text>
+          ) : null}
+          <InputField
+            placeholder="비밀번호 확인"
+            secureTextEntry
+            value={confirmPassword}
+            onChangeText={(text) => {
+              setConfirmPassword(text);
+              setConfirmPasswordError("");
+            }}
+          />
 
-        <PrimaryButton
-          title={loading ? "가입 중..." : "가입하기"}
-          onPress={handleSignup}
-          disabled={loading}
-        />
+          <PrimaryButton
+            title={loading ? "가입 중..." : "가입하기"}
+            onPress={handleSignup}
+            disabled={loading}
+          />
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: colors.background,
