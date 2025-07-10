@@ -1,5 +1,12 @@
 import { useRouter } from "expo-router";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  GestureResponderEvent,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { borderRadius, colors } from "../styles/shared";
 
 interface PostCardProps {
@@ -8,6 +15,7 @@ interface PostCardProps {
   userDisplayName: string;
   imageUrl?: string | null;
   createdAt?: string;
+  onPress: (event: GestureResponderEvent) => void;
 }
 
 export default function PostCard({
@@ -16,11 +24,15 @@ export default function PostCard({
   userDisplayName,
   imageUrl,
   createdAt,
+  onPress,
 }: PostCardProps) {
   const router = useRouter();
 
   return (
-    <Pressable style={styles.card} onPress={() => router.push(`/post/${id}`)}>
+    <Pressable
+      style={({ pressed }) => [styles.card, pressed && styles.pressed]}
+      onPress={() => router.push(`/post/${id}`)}
+    >
       {imageUrl && <Image source={{ uri: imageUrl }} style={styles.image} />}
       <View style={styles.info}>
         <Text style={styles.title}>{title}</Text>
@@ -58,5 +70,8 @@ const styles = StyleSheet.create({
   meta: {
     fontSize: 12,
     color: colors.subText,
+  },
+  pressed: {
+    backgroundColor: "#E5DCD4",
   },
 });
